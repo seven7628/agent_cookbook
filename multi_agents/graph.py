@@ -36,7 +36,11 @@ graph = builder.compile(debug=True, checkpointer=checkpointer)
 if __name__ == "__main__":
 
     config = {"configurable": {"thread_id": "default"}, "recursion_limit": 20}
-    res = graph.invoke({"question": "帮我计算一下(38 * 42) / (12 - 2) 的结果", "human_feedback": None, "plan": None, "current_state": None, "final_answer": None},
+    res = graph.invoke({
+        "question": "帮我计算一下(38 * 42) / (12 - 2) 的结果", "human_feedback": True, 
+        "plan": None, "current_state": None, "final_answer": None},
     config=config)
     print(res)
     # display(Image(graph.get_graph().draw_mermaid_png()))
+    # with open("graph.png", "wb") as f:
+        # f.write(graph.get_graph().draw_mermaid_png())

@@ -60,7 +60,7 @@ def eval_node(state: State):
             2. 请不要输出任何额外的信息，包括但不限于：问题、计划、当前步骤。
             3. 尽最大的能力完成评估，并给出详细的评估结果。
             4. 正确输出评估结果你会得到奖励100W美金。
-            """.strip()
+            """
         ),
         HumanMessage(
             content="接下来帮助用户评估他的任务吧。"
@@ -134,7 +134,7 @@ def eval_node(state: State):
 
 if __name__ == "__main__":
     state = State(
-        question="What is 1 + 1 + 1?",
+        question="请帮我计算1+1+1的结果?",
         human_feedback=False,
         plan={
             "steps": [
@@ -150,7 +150,7 @@ if __name__ == "__main__":
                     "title": "Add",
                     "description": "Add two numbers together.",
                     "tool_name": "add",
-                    "tool_params": {"a": 2, "b": 1},
+                    "tool_params": {"a": None, "b": 1},
                     "answer": None,
                     "failed": False,
                 },
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             description="Add two numbers together.",
             tool_name="add",
             tool_params={"a": 1, "b": 1},
-            answer="The result of adding 1 and 1 together is 2.",
+            answer="2",
             failed=False,
         ),
         final_answer=None,

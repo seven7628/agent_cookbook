@@ -56,7 +56,12 @@ def planner_node(state: State):
     })
 
 if __name__ == "__main__":
-    state = {
-        "question": "请计算1+2+3+4+5"
-    }
-    planner_node(state)
+    state = State(
+        question="请计算1+2+3+4+5",
+        human_feedback=None,
+        plan=None,
+        current_state=None,
+        final_answer=None
+    )
+    
+    print(planner_node(state))
