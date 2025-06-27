@@ -1,0 +1,40 @@
+<view class="camera-container">
+  <!-- 相机预览区域 -->
+  <camera class="camera-preview" device-position="back" flash="off" binderror="cameraError"></camera>
+
+  <!-- 拍摄指南 -->
+  <view class="guide-text">将食物放入框内拍摄</view>
+
+  <!-- 拍摄框 -->
+  <view class="camera-frame">
+    <view class="frame-border"></view>
+    <view class="corner top-left"></view>
+    <view class="corner top-right"></view>
+    <view class="corner bottom-left"></view>
+    <view class="corner bottom-right"></view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="camera-controls">
+    <view class="album-btn" bindtap="chooseImage">
+      <image class="album-icon" src="/images/icon-album.png"></image>
+    </view>
+    <view class="capture-btn" bindtap="takePhoto"></view>
+    <view class="cancel-btn" bindtap="navigateBack">
+      <image class="cancel-icon" src="/images/icon-cancel.png"></image>
+    </view>
+  </view>
+
+  <!-- 照片预览区域 -->
+  <view class="preview-container" wx:if="{{previewVisible}}">
+    <image class="preview-image" src="{{previewImage}}"></image>
+    <view class="preview-controls">
+      <view class="retake-btn" bindtap="retakePhoto">
+        <text class="retake-text">重拍</text>
+      </view>
+      <view class="confirm-btn" bindtap="confirmPhoto">
+        <text class="confirm-text">确认</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,218 @@
+.container {
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+/* 顶部导航栏 */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 0 10rpx;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn {
+  font-size: 32rpx;
+  color: #666;
+  margin: 0 15rpx;
+}
+
+.current-month {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.today-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+}
+
+/* 日历视图 */
+.calendar {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 25rpx;
+  margin-bottom: 30rpx;
+  box-shadow: var(--shadow);
+}
+
+.week-days {
+  display: flex;
+  margin-bottom: 15rpx;
+}
+
+.day {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+  padding: 10rpx 0;
+}
+
+.date-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.date-item {
+  width: 14.28%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
+  position: relative;
+}
+
+.date-item.disabled {
+  color: #ccc;
+}
+
+.date-item.active {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 50%;
+}
+
+.date-item.has-record text {
+  position: relative;
+}
+
+.record-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  position: absolute;
+  bottom: 10rpx;
+}
+
+/* 饮食记录内容 */
+.records-container {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 25rpx;
+  box-shadow: var(--shadow);
+}
+
+.meal-section {
+  margin-bottom: 35rpx;
+}
+
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.meal-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.meal-calories {
+  font-size: 26rpx;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.food-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.food-item {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.food-img {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+}
+
+.food-info {
+  flex: 1;
+}
+
+.food-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 5rpx;
+  display: block;
+}
+
+.food-detail {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.delete-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-icon {
+  width: 30rpx;
+  height: 30rpx;
+  opacity: 0.5;
+}
+
+.add-food-btn {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+  color: var(--primary-color);
+  font-size: 26rpx;
+}
+
+.add-icon {
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 15rpx;
+}
+
+/* 浮动添加按钮 */
+.float-add-btn {
+  position: fixed;
+  bottom: 80rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5rpx 20rpx rgba(74, 144, 226, 0.4);
+}
+
+.float-icon {
+  width: 50rpx;
+  height: 50rpx;
+}

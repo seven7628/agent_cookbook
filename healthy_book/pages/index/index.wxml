@@ -1,0 +1,92 @@
+<view class="container">
+  <!-- 用户信息和热量进度 -->
+  <view class="user-header">
+    <image class="avatar" src="/images/avatar-default.png"></image>
+    <view class="user-info">
+      <text class="username">用户名</text>
+      <text class="date">2023年10月26日</text>
+    </view>
+    <view class="calorie-progress">
+      <text class="progress-text">今日摄入: 1200 / 2000 千卡</text>
+      <progress percent="60" stroke-width="8" activeColor="#4A90E2" backgroundColor="#f5f5f5"></progress>
+    </view>
+  </view>
+
+  <!-- 拍照按钮 -->
+  <view class="camera-btn-container">
+    <navigator url="/pages/camera/camera" class="camera-btn">
+      <image class="camera-icon" src="/images/camera-icon.png"></image>
+      <text class="camera-text">拍摄食物</text>
+    </navigator>
+  </view>
+
+  <!-- 营养摄入比例 -->
+  <view class="nutrition-container">
+    <text class="section-title">营养摄入比例</text>
+    <view class="nutrition-chart">
+      <canvas canvas-id="nutritionChart" class="chart"></canvas>
+      <view class="nutrition-legend">
+        <view class="legend-item">
+          <view class="color-block protein"></view>
+          <text class="legend-text">蛋白质: 25%</text>
+        </view>
+        <view class="legend-item">
+          <view class="color-block carb"></view>
+          <text class="legend-text">碳水: 55%</text>
+        </view>
+        <view class="legend-item">
+          <view class="color-block fat"></view>
+          <text class="legend-text">脂肪: 20%</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日饮食记录 -->
+  <view class="record-container">
+    <text class="section-title">今日饮食记录</text>
+    <view class="meal-list">
+      <!-- 早餐 -->
+      <view class="meal-item">
+        <text class="meal-time">早餐</text>
+        <view class="food-list">
+          <view class="food-item">
+            <image class="food-img" src="/images/food-example1.jpg"></image>
+            <view class="food-info">
+              <text class="food-name">全麦面包</text>
+              <text class="food-nutrition">2片 · 180千卡</text>
+            </view>
+          </view>
+          <view class="food-item">
+            <image class="food-img" src="/images/food-example2.jpg"></image>
+            <view class="food-info">
+              <text class="food-name">煎蛋</text>
+              <text class="food-nutrition">1个 · 90千卡</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 午餐 -->
+      <view class="meal-item">
+        <text class="meal-time">午餐</text>
+        <view class="food-list">
+          <view class="food-item">
+            <image class="food-img" src="/images/food-example3.jpg"></image>
+            <view class="food-info">
+              <text class="food-name">糙米饭</text>
+              <text class="food-nutrition">1碗 · 150千卡</text>
+            </view>
+          </view>
+          <view class="food-item">
+            <image class="food-img" src="/images/food-example4.jpg"></image>
+            <view class="food-info">
+              <text class="food-name">清蒸鱼</text>
+              <text class="food-nutrition">100g · 120千卡</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

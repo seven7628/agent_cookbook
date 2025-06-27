@@ -7,6 +7,7 @@ from state import State
 from cond import cond_to_tools_or_human_loop, cond_to_tools_or_end
 from langgraph.checkpoint.memory import InMemorySaver
 from IPython.display import display, Image
+import asyncio
 
 
 # builder.add_conditional_edges("eval", cond_to_tools_or_end, {
@@ -41,11 +42,12 @@ if __name__ == "__main__":
 
     config = {"configurable": {"thread_id": "default"}, "recursion_limit": 20}
     graph = create_graph()
-    res = graph.invoke({
+    for agent, _, event in graph.stream({
         "question": "帮我计算一下(38 * 42) / (12 - 2) 的结果", "human_feedback": True, 
         "plan": None, "current_state": None, "final_answer": None},
-    config=config)
-    print(res)
+    config=config, subgraphs=True, stream_mode=["messages", "updates"]):
+        print("agent:", agent, "\n event: ", event, "\n\n")
+    # print(res)
     # display(Image(graph.get_graph().draw_mermaid_png()))
     # with open("graph.png", "wb") as f:
         # f.write(graph.get_graph().draw_mermaid_png())

@@ -1,0 +1,158 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="top-nav">
+    <view class="date-nav">
+      <text class="nav-btn" bindtap="prevMonth">&lt;</text>
+      <text class="current-month">{{currentMonth}}</text>
+      <text class="nav-btn" bindtap="nextMonth">&gt;</text>
+    </view>
+    <text class="today-btn" bindtap="goToToday">今天</text>
+  </view>
+
+  <!-- 日历视图 -->
+  <view class="calendar">
+    <!-- 星期标题 -->
+    <view class="week-days">
+      <view class="day">日</view>
+      <view class="day">一</view>
+      <view class="day">二</view>
+      <view class="day">三</view>
+      <view class="day">四</view>
+      <view class="day">五</view>
+      <view class="day">六</view>
+    </view>
+
+    <!-- 日期网格 -->
+    <view class="date-grid">
+      <!-- 上月日期 -->
+      <block wx:for="{{lastMonthDays}}" wx:key="*this">
+        <view class="date-item disabled">{{item}}</view>
+      </block>
+
+      <!-- 本月日期 -->
+      <block wx:for="{{currentMonthDays}}" wx:key="*this">
+        <view class="date-item {{item === selectedDay ? 'active' : ''}} {{hasRecord(item) ? 'has-record' : ''}}" bindtap="selectDate" data-day="{{item}}">
+          <text>{{item}}</text>
+          <view class="record-dot" wx:if="hasRecord(item)"></view>
+        </view>
+      </block>
+
+      <!-- 下月日期 -->
+      <block wx:for="{{nextMonthDays}}" wx:key="*this">
+        <view class="date-item disabled">{{item}}</view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 饮食记录内容 -->
+  <view class="records-container">
+    <!-- 早餐 -->
+    <view class="meal-section">
+      <view class="meal-header">
+        <text class="meal-title">早餐</text>
+        <text class="meal-calories">{{getMealCalories('breakfast')}} 千卡</text>
+      </view>
+      <view class="food-list">
+        <block wx:for="{{mealRecords.breakfast}}" wx:key="{{item.id}}">
+          <view class="food-item">
+            <image class="food-img" src="{{item.image}}"></image>
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-detail">{{item.amount}} · {{item.calories}}千卡</text>
+            </view>
+            <view class="delete-btn" bindtap="deleteFood" data-meal="breakfast" data-id="{{item.id}}">
+              <image src="/images/icon-delete.png" class="delete-icon"></image>
+            </view>
+          </view>
+        </block>
+        <view class="add-food-btn" bindtap="addFood" data-meal="breakfast">
+          <image src="/images/icon-add.png" class="add-icon"></image>
+          <text class="add-text">添加食物</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 午餐 -->
+    <view class="meal-section">
+      <view class="meal-header">
+        <text class="meal-title">午餐</text>
+        <text class="meal-calories">{{getMealCalories('lunch')}} 千卡</text>
+      </view>
+      <view class="food-list">
+        <block wx:for="{{mealRecords.lunch}}" wx:key="{{item.id}}">
+          <view class="food-item">
+            <image class="food-img" src="{{item.image}}"></image>
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-detail">{{item.amount}} · {{item.calories}}千卡</text>
+            </view>
+            <view class="delete-btn" bindtap="deleteFood" data-meal="lunch" data-id="{{item.id}}">
+              <image src="/images/icon-delete.png" class="delete-icon"></image>
+            </view>
+          </view>
+        </block>
+        <view class="add-food-btn" bindtap="addFood" data-meal="lunch">
+          <image src="/images/icon-add.png" class="add-icon"></image>
+          <text class="add-text">添加食物</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 晚餐 -->
+    <view class="meal-section">
+      <view class="meal-header">
+        <text class="meal-title">晚餐</text>
+        <text class="meal-calories">{{getMealCalories('dinner')}} 千卡</text>
+      </view>
+      <view class="food-list">
+        <block wx:for="{{mealRecords.dinner}}" wx:key="{{item.id}}">
+          <view class="food-item">
+            <image class="food-img" src="{{item.image}}"></image>
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-detail">{{item.amount}} · {{item.calories}}千卡</text>
+            </view>
+            <view class="delete-btn" bindtap="deleteFood" data-meal="dinner" data-id="{{item.id}}">
+              <image src="/images/icon-delete.png" class="delete-icon"></image>
+            </view>
+          </view>
+        </block>
+        <view class="add-food-btn" bindtap="addFood" data-meal="dinner">
+          <image src="/images/icon-add.png" class="add-icon"></image>
+          <text class="add-text">添加食物</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加餐 -->
+    <view class="meal-section">
+      <view class="meal-header">
+        <text class="meal-title">加餐</text>
+        <text class="meal-calories">{{getMealCalories('snack')}} 千卡</text>
+      </view>
+      <view class="food-list">
+        <block wx:for="{{mealRecords.snack}}" wx:key="{{item.id}}">
+          <view class="food-item">
+            <image class="food-img" src="{{item.image}}"></image>
+            <view class="food-info">
+              <text class="food-name">{{item.name}}</text>
+              <text class="food-detail">{{item.amount}} · {{item.calories}}千卡</text>
+            </view>
+            <view class="delete-btn" bindtap="deleteFood" data-meal="snack" data-id="{{item.id}}">
+              <image src="/images/icon-delete.png" class="delete-icon"></image>
+            </view>
+          </view>
+        </block>
+        <view class="add-food-btn" bindtap="addFood" data-meal="snack">
+          <image src="/images/icon-add.png" class="add-icon"></image>
+          <text class="add-text">添加食物</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 浮动添加按钮 -->
+  <view class="float-add-btn" bindtap="goToCamera">
+    <image src="/images/icon-camera.png" class="float-icon"></image>
+  </view>
+</view>

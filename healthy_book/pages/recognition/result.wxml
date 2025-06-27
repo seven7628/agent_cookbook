@@ -1,0 +1,75 @@
+<view class="result-container">
+  <!-- 顶部导航 -->
+  <view class="top-nav">
+    <view class="back-btn" bindtap="navigateBack">
+      <image class="back-icon" src="/images/back-icon.png"></image>
+    </view>
+    <text class="nav-title">识别结果</text>
+    <view class="empty-space"></view>
+  </view>
+
+  <!-- 食物图片 -->
+  <view class="food-image-container">
+    <image class="food-image" src="{{imagePath}}"></image>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="recognition-result">
+    <text class="result-title">识别结果</text>
+    <view class="food-name-container">
+      <text class="food-name">{{foodInfo.name}}</text>
+      <view class="confidence">
+        <text class="confidence-text">{{foodInfo.confidence}}% 匹配</text>
+      </view>
+    </view>
+    <view class="similar-foods" wx:if="{{similarFoods.length > 0}}">
+      <text class="similar-text">相似食物:</text>
+      <view class="similar-list">
+        <text class="similar-item" wx:for="{{similarFoods}}" wx:key="index" bindtap="selectSimilarFood" data-index="{{index}}">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 份量调整 -->
+  <view class="portion-adjustment">
+    <text class="section-title">份量调整</text>
+    <view class="portion-controls">
+      <view class="portion-btn minus" bindtap="decreasePortion">-</view>
+      <view class="portion-value">{{portion}} {{unit}}</view>
+      <view class="portion-btn plus" bindtap="increasePortion">+</view>
+    </view>
+    <view class="portion-options">
+      <view class="portion-option {{unit === '份' ? 'active' : ''}}" bindtap="setUnit" data-unit="份">份</view>
+      <view class="portion-option {{unit === '克' ? 'active' : ''}}" bindtap="setUnit" data-unit="克">克</view>
+      <view class="portion-option {{unit === '毫升' ? 'active' : ''}}" bindtap="setUnit" data-unit="毫升">毫升</view>
+    </view>
+  </view>
+
+  <!-- 营养信息 -->
+  <view class="nutrition-info">
+    <text class="section-title">营养信息</text>
+    <view class="nutrition-grid">
+      <view class="nutrition-item">
+        <text class="nutrition-value">{{nutrition.calories}} 千卡</text>
+        <text class="nutrition-label">热量</text>
+      </view>
+      <view class="nutrition-item">
+        <text class="nutrition-value">{{nutrition.protein}} g</text>
+        <text class="nutrition-label">蛋白质</text>
+      </view>
+      <view class="nutrition-item">
+        <text class="nutrition-value">{{nutrition.carb}} g</text>
+        <text class="nutrition-label">碳水化合物</text>
+      </view>
+      <view class="nutrition-item">
+        <text class="nutrition-value">{{nutrition.fat}} g</text>
+        <text class="nutrition-label">脂肪</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加到记录按钮 -->
+  <view class="add-to-record-btn" bindtap="addToRecord">
+    <text class="btn-text">添加到今日饮食</text>
+  </view>
+</view>

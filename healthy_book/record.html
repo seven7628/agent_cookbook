@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriScan Pro - 智能食物识别</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-light: #6c8cff;
+            --secondary: #7b68ee;
+            --accent: #38bdf8;
+            --text: #334155;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'SF Pro Display', 'PingFang SC', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e6f7ff, #f0f5ff);
+            color: var(--text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 科技感背景元素 */
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .tech-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(30px);
+        }
+        
+        .element-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary-light);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .element-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            bottom: 10%;
+            left: 10%;
+        }
+        
+        .element-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--secondary);
+            top: 30%;
+            left: 20%;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 16px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 18px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .back-btn:hover {
+            transform: translateX(-3px);
+            background: white;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* 页面容器 */
+        .page-container {
+            flex: 1;
+            padding: 0 16px 20px;
+            overflow-y: auto;
+        }
+        
+        /* 拍照界面 */
+        .camera-view {
+            position: relative;
+            height: 65vh;
+            margin-top: 16px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            background: #000;
+            transform-style: preserve-3d;
+            transform: perspective(800px) rotateX(2deg);
+        }
+        
+        .camera-preview {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2c3e50, #4a6cf7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .camera-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            opacity: 0.8;
+        }
+        
+        .camera-preview::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            z-index: 2;
+        }
+        
+        .camera-guide {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 14px 20px;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+            max-width: 80%;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .camera-guide i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .gallery-btn, .flip-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .gallery-btn:hover, .flip-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .capture-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 30px;
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .capture-btn::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .capture-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 识别结果页 */
+        .result-view {
+            display: none;
+            padding-top: 20px;
+        }
+        
+        .food-preview {
+            height: 300px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            transform-style: preserve-3d;
+            transform: perspective(800px) rotateX(2deg);
+        }
+        
+        .food-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .ai-analysis {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(74, 108, 247, 0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+        }
+        
+        .ai-analysis i {
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 食物标注气泡 */
+        .food-marker {
+            position: absolute;
+            z-index: 3;
+            animation: float 4s ease-in-out infinite;
+            animation-delay: calc(var(--delay) * 0.5s);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .food-marker.active {
+            opacity: 1;
+        }
+        
+        .marker-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .marker-dot:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 0 8px rgba(56, 189, 248, 0.3);
+        }
+        
+        .marker-popup {
+            position: absolute;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            min-width: 140px;
+            transform: translateY(-100%) translateX(-50%);
+            pointer-events: none;
+        }
+        
+        .marker-popup::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 8px 0;
+            border-style: solid;
+            border-color: var(--card-bg) transparent transparent;
+        }
+        
+        .food-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text);
+            font-size: 15px;
+        }
+        
+        .food-calories {
+            font-size: 14px;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .food-confidence {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .result-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-bottom: 25px;
+        }
+        
+        .result-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-title i {
+            margin-right: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .food-list {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+        
+        .food-list::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .food-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        .food-item {
+            min-width: 120px;
+            height: 140px;
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            border-radius: 18px;
+            padding: 15px;
+            margin-right: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .food-item.active {
+            border-color: var(--primary);
+            background: rgba(74, 108, 247, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(74, 108, 247, 0.2);
+        }
+        
+        .food-item-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .food-item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+        }
+        
+        .food-item-calories {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        /* AI实时分析流 */
+        .ai-stream {
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            height: 220px;
+            overflow-y: auto;
+        }
+        
+        .stream-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stream-title i {
+            margin-right: 10px;
+        }
+        
+        .stream-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        
+        .stream-line {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .stream-line:last-child {
+            margin-bottom: 0;
+        }
+        
+        .stream-highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+        
+        .add-btn {
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 18px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(74, 108, 247, 0.4);
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(74, 108, 247, 0.5);
+        }
+        
+        .add-btn i {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        .typing {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end);
+        }
+    </style>
+</head>
+<body>
+    <!-- 科技感背景元素 -->
+    <div class="tech-bg">
+        <div class="tech-element element-1 floating" style="animation-delay: 0s;"></div>
+        <div class="tech-element element-2 floating" style="animation-delay: 1s;"></div>
+        <div class="tech-element element-3 floating" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <div class="container">
+        <!-- 导航栏 -->
+        <div class="navbar">
+            <div class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="page-title">食物识别</div>
+            <div class="back-btn" style="visibility: hidden;">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+        </div>
+        
+        <!-- 页面容器 -->
+        <div class="page-container">
+            <!-- 拍照界面 -->
+            <div class="camera-view">
+                <div class="camera-preview">
+                    <!-- 这里会是摄像头预览 -->
+                </div>
+                <div class="camera-overlay">
+                    <div class="camera-guide">
+                        <i class="fas fa-lightbulb"></i> 将食物置于框内并确保光线充足
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <div class="gallery-btn">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        
+                        <div class="capture-btn">
+                            <div class="inner-circle"></div>
+                        </div>
+                        
+                        <div class="flip-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 识别结果页 -->
+            <div class="result-view">
+                <div class="food-preview">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="识别食物">
+                    <div class="ai-analysis">
+                        <i class="fas fa-brain"></i> AI分析
+                    </div>
+                    
+                    <!-- 食物标注气泡 -->
+                    <div class="food-marker" style="top: 30%; left: 25%; --delay: 0">
+                        <div class="marker-dot"></div>
+                        <div class="marker-popup">
+                            <div class="food-name">草莓</div>
+                            <div class="food-calories">32 kcal/100g</div>
+                            <div class="food-confidence">置信度: 92%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="food-marker" style="top: 65%; left: 45%; --delay: 1">
+                        <div class="marker-dot"></div>
+                        <div class="marker-popup">
+                            <div class="food-name">蓝莓</div>
+                            <div class="food-calories">57 kcal/100g</div>
+                            <div class="food-confidence">置信度: 89%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="food-marker" style="top: 40%; left: 70%; --delay: 2">
+                        <div class="marker-dot"></div>
+                        <div class="marker-popup">
+                            <div class="food-name">燕麦片</div>
+                            <div class="food-calories">389 kcal/100g</div>
+                            <div class="food-confidence">置信度: 85%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI实时分析流 -->
+                <div class="ai-stream">
+                    <div class="stream-title">
+                        <i class="fas fa-microchip"></i> AI分析报告
+                    </div>
+                    
+                    <div class="stream-content">
+                        <div class="stream-line fade-in">正在分析图像...</div>
+                        <div class="stream-line fade-in delay-1">检测到多种食物成分</div>
+                        <div class="stream-line fade-in delay-2">识别到主要成分：<span class="stream-highlight">草莓、蓝莓、燕麦片</span></div>
+                        <div class="stream-line fade-in delay-3">营养分析：<span class="stream-highlight">高纤维、富含维生素C、低脂肪</span></div>
+                        <div class="stream-line fade-in delay-4">总热量估算：<span class="stream-highlight">约350 kcal</span></div>
+                        <div class="stream-line fade-in delay-1">食物分类：<span class="stream-highlight">水果沙拉</span></div>
+                        <div class="stream-line fade-in delay-2">健康评分：<span class="stream-highlight">92/100</span>（非常健康）</div>
+                        <div class="stream-line fade-in delay-3">建议：<span class="stream-highlight">适合早餐，可搭配蛋白质食物</span></div>
+                    </div>
+                </div>
+                
+                <div class="result-container">
+                    <div class="result-title">
+                        <i class="fas fa-list"></i> 识别结果
+                    </div>
+                    
+                    <div class="food-list">
+                        <div class="food-item active">
+                            <div class="food-item-icon">
+                                <i class="fas fa-apple-alt"></i>
+                            </div>
+                            <div class="food-item-name">水果沙拉</div>
+                            <div class="food-item-calories">≈ 350 kcal</div>
+                        </div>
+                        
+                        <div class="food-item">
+                            <div class="food-item-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="food-item-name">蔬菜沙拉</div>
+                            <div class="food-item-calories">≈ 180 kcal</div>
+                        </div>
+                        
+                        <div class="food-item">
+                            <div class="food-item-icon">
+                                <i class="fas fa-bread-slice"></i>
+                            </div>
+                            <div class="food-item-name">吐司沙拉</div>
+                            <div class="food-item-calories">≈ 420 kcal</div>
+                        </div>
+                        
+                        <div class="food-item">
+                            <div class="food-item-icon">
+                                <i class="fas fa-cheese"></i>
+                            </div>
+                            <div class="food-item-name">酸奶沙拉</div>
+                            <div class="food-item-calories">≈ 280 kcal</div>
+                        </div>
+                    </div>
+                    
+                    <button class="add-btn">
+                        <i class="fas fa-plus-circle"></i> 添加到今日记录
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 切换页面视图
+        const cameraView = document.querySelector('.camera-view');
+        const resultView = document.querySelector('.result-view');
+        const captureBtn = document.querySelector('.capture-btn');
+        
+        captureBtn.addEventListener('click', function() {
+            cameraView.style.display = 'none';
+            resultView.style.display = 'block';
+            
+            // 添加动画效果
+            resultView.style.opacity = '0';
+            resultView.style.transform = 'translateY(20px)';
+            resultView.style.transition = 'all 0.5s ease';
+            
+            setTimeout(() => {
+                resultView.style.opacity = '1';
+                resultView.style.transform = 'translateY(0)';
+                
+                // 开始气泡轮播
+                startMarkerCarousel();
+                
+                // 显示AI流式内容
+                simulateAIStream();
+            }, 50);
+        });
+        
+        // 返回按钮功能
+        const backBtn = document.querySelector('.back-btn');
+        backBtn.addEventListener('click', function() {
+            if (resultView.style.display === 'block') {
+                resultView.style.display = 'none';
+                cameraView.style.display = 'block';
+                
+                // 停止所有动画
+                stopMarkerCarousel();
+            } else {
+                // 实际应用中返回首页
+                alert('返回首页');
+            }
+        });
+        
+        // 食物选择功能
+        const foodItems = document.querySelectorAll('.food-item');
+        foodItems.forEach(item => {
+            item.addEventListener('click', function() {
+                foodItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // 气泡轮播功能
+        let carouselInterval;
+        const foodMarkers = document.querySelectorAll('.food-marker');
+        let currentMarkerIndex = 0;
+        
+        function startMarkerCarousel() {
+            // 初始显示第一个气泡
+            foodMarkers.forEach(marker => marker.classList.remove('active'));
+            if(foodMarkers.length > 0) {
+                foodMarkers[currentMarkerIndex].classList.add('active');
+            }
+            
+            // 设置轮播
+            carouselInterval = setInterval(() => {
+                // 隐藏当前气泡
+                foodMarkers[currentMarkerIndex].classList.remove('active');
+                
+                // 移动到下一个气泡
+                currentMarkerIndex = (currentMarkerIndex + 1) % foodMarkers.length;
+                
+                // 显示新气泡
+                foodMarkers[currentMarkerIndex].classList.add('active');
+            }, 1500);
+        }
+        
+        function stopMarkerCarousel() {
+            clearInterval(carouselInterval);
+            foodMarkers.forEach(marker => marker.classList.remove('active'));
+        }
+        
+        // 模拟AI流式输出
+        function simulateAIStream() {
+            const streamContent = document.querySelector('.stream-content');
+            const lines = [
+                "正在分析图像...",
+                "检测到多种食物成分",
+                "识别到主要成分：草莓、蓝莓、燕麦片",
+                "营养分析：高纤维、富含维生素C、低脂肪",
+                "总热量估算：约350 kcal",
+                "食物分类：水果沙拉",
+                "健康评分：92/100（非常健康）",
+                "建议：适合早餐，可搭配蛋白质食物"
+            ];
+            
+            // 清空内容
+            streamContent.innerHTML = '';
+            
+            // 添加每行内容
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    const lineElement = document.createElement('div');
+                    lineElement.className = 'stream-line fade-in';
+                    lineElement.style.animationDelay = `${index * 0.5}s`;
+                    lineElement.innerHTML = line;
+                    
+                    // 高亮关键词
+                    const highlightWords = ['草莓', '蓝莓', '燕麦片', '高纤维', '维生素C', '低脂肪', '350 kcal', '水果沙拉', '92/100', '非常健康', '早餐', '蛋白质'];
+                    let tempLine = line;
+                    highlightWords.forEach(word => {
+                        tempLine = tempLine.replace(word, `<span class="stream-highlight">${word}</span>`);
+                    });
+                    lineElement.innerHTML = tempLine;
+                    
+                    streamContent.appendChild(lineElement);
+                    
+                    // 自动滚动到底部
+                    streamContent.scrollTop = streamContent.scrollHeight;
+                }, index * 800);
+            });
+        }
+        
+        // 食物标注气泡点击功能
+        foodMarkers.forEach(marker => {
+            const dot = marker.querySelector('.marker-dot');
+            
+            dot.addEventListener('click', function() {
+                // 停止自动轮播
+                stopMarkerCarousel();
+                
+                // 关闭所有气泡
+                foodMarkers.forEach(m => m.classList.remove('active'));
+                
+                // 打开当前气泡
+                marker.classList.add('active');
+                
+                // 3秒后恢复自动轮播
+                setTimeout(() => {
+                    startMarkerCarousel();
+                }, 3000);
+            });
+        });
+        
+        // 点击其他地方关闭气泡
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.food-marker')) {
+                foodMarkers.forEach(marker => marker.classList.remove('active'));
+            }
+        });
+    </script>
+</body>
+</html>

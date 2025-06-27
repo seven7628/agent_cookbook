@@ -1,0 +1,219 @@
+.report-container {
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.nav-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+}
+
+.share-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 10rpx;
+}
+
+.share-text {
+  font-size: 28rpx;
+  color: #4A90E2;
+}
+
+/* 报告日期 */
+.report-date {
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+/* 健康评分卡片 */
+.score-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+}
+
+.score-circle {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2 0%, #5CB8E6 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30rpx;
+}
+
+.score-number {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.score-text {
+  font-size: 28rpx;
+  color: #fff;
+  margin-top: 10rpx;
+}
+
+.score-description {
+  flex: 1;
+}
+
+.description-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.description-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 图表区域通用样式 */
+.chart-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart {
+  width: 100%;
+  height: 400rpx;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 0 20rpx;
+}
+
+.color-block {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 4rpx;
+  margin-right: 10rpx;
+}
+
+.consumed {
+  background-color: #4A90E2;
+}
+
+.target {
+  background-color: #F5A623;
+}
+
+.legend-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 营养结构分析 */
+.nutrition-charts {
+  display: flex;
+  justify-content: space-around;
+}
+
+.chart-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.small-chart {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.chart-label {
+  font-size: 26rpx;
+  color: #333;
+  margin-top: 15rpx;
+  font-weight: 500;
+}
+
+/* 饮食建议 */
+.suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.suggestion-item {
+  display: flex;
+  padding: 20rpx;
+  background-color: #f5f9ff;
+  border-radius: 12rpx;
+  border-left: 6rpx solid #4A90E2;
+}
+
+.suggestion-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+}
+
+.suggestion-content {
+  flex: 1;
+}
+
+.suggestion-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+  display: block;
+}
+
+.suggestion-desc {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}

@@ -1,0 +1,83 @@
+<view class="profile-container">
+  <!-- 用户信息区域 -->
+  <view class="user-info-section">
+    <image class="user-avatar" src="{{userInfo.avatarUrl}}"></image>
+    <view class="user-details">
+      <text class="user-name">{{userInfo.nickname}}</text>
+      <text class="user-email">{{userInfo.email || '未绑定邮箱'}}</text>
+    </view>
+    <view class="edit-btn" bindtap="editUserInfo">
+      <image class="edit-icon" src="/images/edit-icon.png"></image>
+    </view>
+  </view>
+
+  <!-- 身体数据卡片 -->
+  <view class="body-data-card">
+    <text class="card-title">身体数据</text>
+    <view class="data-grid">
+      <view class="data-item">
+        <text class="data-value">{{bodyData.height}} cm</text>
+        <text class="data-label">身高</text>
+      </view>
+      <view class="data-item">
+        <text class="data-value">{{bodyData.weight}} kg</text>
+        <text class="data-label">体重</text>
+      </view>
+      <view class="data-item">
+        <text class="data-value">{{bodyData.bmi}}</text>
+        <text class="data-label">BMI</text>
+      </view>
+      <view class="data-item">
+        <text class="data-value">{{bodyData.targetCalories}} 千卡</text>
+        <text class="data-label">每日目标</text>
+      </view>
+    </view>
+    <view class="edit-data-btn" bindtap="editBodyData">
+      <text class="btn-text">编辑数据</text>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="function-menu">
+    <view class="menu-section">
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/settings/settings">
+        <image class="menu-icon" src="/images/icon-settings.png"></image>
+        <text class="menu-text">设置</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/preferences/preferences">
+        <image class="menu-icon" src="/images/icon-preferences.png"></image>
+        <text class="menu-text">饮食偏好</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/favorite/favorite">
+        <image class="menu-icon" src="/images/icon-favorite.png"></image>
+        <text class="menu-text">常用食物</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+    </view>
+
+    <view class="menu-section">
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/history/history">
+        <image class="menu-icon" src="/images/icon-history.png"></image>
+        <text class="menu-text">历史报告</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/help/help">
+        <image class="menu-icon" src="/images/icon-help.png"></image>
+        <text class="menu-text">帮助中心</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+      <view class="menu-item" bindtap="navigateToPage" data-page="/pages/about/about">
+        <image class="menu-icon" src="/images/icon-about.png"></image>
+        <text class="menu-text">关于我们</text>
+        <image class="arrow-icon" src="/images/arrow-right.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录按钮 -->
+  <view class="logout-btn" bindtap="logout">
+    <text class="logout-text">退出登录</text>
+  </view>
+</view>

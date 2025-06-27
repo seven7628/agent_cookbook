@@ -14,7 +14,7 @@ def human_assistance(continued: bool) -> str:
 
 def human_loop_node(state: State):
     llm = ChatOllama(
-        model="qwen3:latest",
+        model="qwen2.5:7b",
         base_url="http://localhost:11434"
     )
 

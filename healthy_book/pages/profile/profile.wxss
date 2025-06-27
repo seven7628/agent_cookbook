@@ -1,0 +1,170 @@
+.profile-container {
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+/* 用户信息区域 */
+.user-info-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-details {
+  flex: 1;
+  margin-left: 30rpx;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.user-email {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.edit-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-icon {
+  width: 40rpx;
+  height: 40rpx;
+  color: #666;
+}
+
+/* 身体数据卡片 */
+.body-data-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  display: block;
+}
+
+.data-grid {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+}
+
+.data-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.data-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 10rpx;
+}
+
+.data-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.edit-data-btn {
+  width: 100%;
+  height: 80rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-text {
+  font-size: 28rpx;
+  color: #4A90E2;
+}
+
+/* 功能菜单 */
+.function-menu {
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
+  margin-bottom: 30rpx;
+}
+
+.menu-section {
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.menu-section:last-child {
+  border-bottom: none;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  height: 100rpx;
+}
+
+.menu-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.arrow-icon {
+  width: 30rpx;
+  height: 30rpx;
+  color: #999;
+}
+
+/* 退出登录按钮 */
+.logout-btn {
+  width: 100%;
+  height: 90rpx;
+  background-color: #fff;
+  border: 2rpx solid #ff4d4f;
+  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-text {
+  font-size: 30rpx;
+  color: #ff4d4f;
+  font-weight: 500;
+}

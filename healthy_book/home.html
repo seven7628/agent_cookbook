@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - 智能饮食记录</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-light: #6c8cff;
+            --secondary: #7b68ee;
+            --accent: #38bdf8;
+            --text: #334155;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'SF Pro Display', 'PingFang SC', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e6f7ff, #f0f5ff);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 科技感背景元素 */
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .tech-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(30px);
+        }
+        
+        .element-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary-light);
+            top: -100px;
+            right: -100px;
+        }
+        
+        .element-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            bottom: 10%;
+            left: 10%;
+        }
+        
+        .element-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--secondary);
+            top: 30%;
+            left: 20%;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 头部区域 - 磨砂玻璃效果 */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 24px 20px 18px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 2.5D效果装饰 */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -40px;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, var(--primary), transparent 70%);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 8px 16px rgba(74, 108, 247, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .avatar:hover {
+            transform: translateY(-3px) rotate(5deg);
+        }
+        
+        .date {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .calories-progress {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 0 15px rgba(74, 108, 247, 0.3);
+            transition: var(--transition);
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+        }
+        
+        /* 拍照按钮 - 2.5D悬浮效果 */
+        .camera-section {
+            padding: 24px 0;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .camera-btn {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 42px;
+            box-shadow: 0 15px 30px rgba(74, 108, 247, 0.4);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            transform: perspective(500px) rotateX(5deg) rotateY(0deg);
+        }
+        
+        .camera-btn:hover {
+            transform: perspective(500px) rotateX(8deg) rotateY(5deg) translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(74, 108, 247, 0.5);
+        }
+        
+        .camera-btn::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .camera-btn::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), transparent 70%);
+            opacity: 0.15;
+            z-index: -2;
+            filter: blur(20px);
+        }
+        
+        /* 饮食时间线 */
+        .timeline-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .food-card {
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(1deg) rotateY(0deg);
+        }
+        
+        .food-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(2deg) translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .food-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+        }
+        
+        .food-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-right: 18px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .food-card:hover .food-image {
+            transform: scale(1.05);
+        }
+        
+        .food-info {
+            flex: 1;
+        }
+        
+        .food-name {
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+            font-size: 17px;
+        }
+        
+        .food-time {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .food-time i {
+            margin-right: 6px;
+            color: var(--accent);
+        }
+        
+        .food-calories {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .food-calories i {
+            margin-right: 6px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* 营养环形图 */
+        .nutrition-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nutrition-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, var(--accent), transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+            filter: blur(20px);
+        }
+        
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .chart-center .calories {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+        
+        .chart-center .label {
+            font-size: 15px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .nutrition-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+        }
+        
+        .nutrient {
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            min-width: 90px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            transform: perspective(500px) rotateX(1deg);
+        }
+        
+        .nutrient:hover {
+            transform: perspective(500px) rotateX(3deg) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .nutrient-value {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        
+        .nutrient-label {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .protein .nutrient-value { 
+            background: linear-gradient(135deg, #4a6cf7, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .carbs .nutrient-value { 
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .fat .nutrient-value { 
+            background: linear-gradient(135deg, #ef4444, #f87171);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            
+            .header, .timeline-section, .nutrition-section {
+                border-radius: 20px;
+                padding: 20px;
+            }
+            
+            .camera-btn {
+                width: 76px;
+                height: 76px;
+                font-size: 36px;
+            }
+            
+            .food-card {
+                padding: 16px;
+            }
+            
+            .food-image {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 科技感背景元素 -->
+    <div class="tech-bg">
+        <div class="tech-element element-1 floating" style="animation-delay: 0s;"></div>
+        <div class="tech-element element-2 floating" style="animation-delay: 1s;"></div>
+        <div class="tech-element element-3 floating" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <div class="container">
+        <!-- 头部区域 -->
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar">U</div>
+                <div class="date">2023年11月15日 星期三</div>
+            </div>
+            
+            <div class="calories-progress">
+                <div class="progress-label">
+                    <span>已摄入: 1200 kcal</span>
+                    <span>目标: 2000 kcal</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 拍照按钮 -->
+        <div class="camera-section">
+            <div class="camera-btn">
+                +
+            </div>
+        </div>
+        
+        <!-- 饮食时间线 -->
+        <div class="timeline-section">
+            <div class="section-title">
+                <i class="fas fa-utensils"></i> 今日饮食记录
+            </div>
+            
+            <div class="food-card">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80" alt="早餐" class="food-image">
+                <div class="food-info">
+                    <div class="food-name">水果沙拉配燕麦</div>
+                    <div class="food-time"><i class="fas fa-clock"></i> 08:30 早餐</div>
+                    <div class="food-calories"><i class="fas fa-fire"></i> 350 kcal</div>
+                </div>
+            </div>
+            
+            <div class="food-card">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=200&q=80" alt="午餐" class="food-image">
+                <div class="food-info">
+                    <div class="food-name">鸡胸肉蔬菜沙拉</div>
+                    <div class="food-time"><i class="fas fa-clock"></i> 12:15 午餐</div>
+                    <div class="food-calories"><i class="fas fa-fire"></i> 480 kcal</div>
+                </div>
+            </div>
+            
+            <div class="food-card">
+                <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=200&q=80" alt="加餐" class="food-image">
+                <div class="food-info">
+                    <div class="food-name">希腊酸奶配坚果</div>
+                    <div class="food-time"><i class="fas fa-clock"></i> 15:40 加餐</div>
+                    <div class="food-calories"><i class="fas fa-fire"></i> 220 kcal</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 营养环形图 -->
+        <div class="nutrition-section">
+            <div class="section-title">
+                <i class="fas fa-chart-pie"></i> 营养摄入分析
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="nutritionChart" width="250" height="250"></canvas>
+                <div class="chart-center">
+                    <div class="calories">1850</div>
+                    <div class="label">kcal</div>
+                </div>
+            </div>
+            
+            <div class="nutrition-info">
+                <div class="nutrient protein">
+                    <div class="nutrient-value">35%</div>
+                    <div class="nutrient-label">蛋白质</div>
+                </div>
+                <div class="nutrient carbs">
+                    <div class="nutrient-value">40%</div>
+                    <div class="nutrient-label">碳水</div>
+                </div>
+                <div class="nutrient fat">
+                    <div class="nutrient-value">25%</div>
+                    <div class="nutrient-label">脂肪</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化营养环形图
+        const ctx = document.getElementById('nutritionChart').getContext('2d');
+        const nutritionChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['蛋白质', '碳水', '脂肪'],
+                datasets: [{
+                    data: [35, 40, 25],
+                    backgroundColor: [
+                        'rgba(74, 108, 247, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(74, 108, 247, 1)',
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 10,
+                    spacing: 2,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                cutout: '70%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
+                }
+            }
+        });
+        
+        // 动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 进度条动画
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '0%';
+            setTimeout(() => {
+                progressFill.style.transition = 'width 1.5s cubic-bezier(0.22, 0.61, 0.36, 1)';
+                progressFill.style.width = '65%';
+            }, 300);
+            
+            // 卡片动画
+            const cards = document.querySelectorAll('.food-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'perspective(1000px) rotateX(10deg) translateY(30px)';
+                    card.style.transition = 'opacity 0.5s, transform 0.5s';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'perspective(1000px) rotateX(1deg) rotateY(0deg)';
+                    }, 100);
+                }, 400 + (index * 150));
+            });
+            
+            // 按钮悬浮效果
+            const cameraBtn = document.querySelector('.camera-btn');
+            cameraBtn.addEventListener('mousemove', (e) => {
+                const rect = cameraBtn.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                
+                cameraBtn.style.transform = `perspective(500px) rotateX(${8 - y * 6}deg) rotateY(${x * 6}deg) translateY(-8px) scale(1.05)`;
+            });
+            
+            cameraBtn.addEventListener('mouseleave', () => {
+                cameraBtn.style.transform = 'perspective(500px) rotateX(5deg) rotateY(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
